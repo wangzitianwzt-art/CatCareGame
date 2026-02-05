@@ -9,12 +9,78 @@ interface GameState {
   catImageUrl: string | null;
   catName: string;
   lastBathTime: number;
+  totalPlayTime: number;
+  sleepStartTime: number | null;
 }
 
 const GAME_CONFIG = {
+  TICK_INTERVAL: 1000, // 每秒更新一次
+  FOOD_CONSUME_INTERVAL: 5, // 每5秒消耗1猫粮
   BATH_COOLDOWN: 10 * 60 * 1000,
   BATH_EMERGENCY_THRESHOLD: 25,
+  SLEEP_TIREDNESS_DECREASE: 2, // 睡眠时每秒减少2疲惫值
 };
+
+let gameInterval: number | null = null;
+
+// 获取默认状态
+function getDefaultState(): GameState {
+  return {
+    hunger: 0,
+    tiredness: 0,
+    cleanliness: 100,
+    catFood: 0,
+    isSleeping: false,
+    catImageUrl: null,
+    catName: '你的猫咪',
+    lastBathTime: Date.now(),
+    totalPlayTime: 0,
+    sleepStartTime: null,
+  };
+}
+
+// 启动游戏逻辑定时器
+function startGameLoop() {
+  if (gameInterval) return;
+  
+  gameInterval = window.setInterval(() => {
+    chrome.storage.local.get('gameState', (result: any) => {
+      const state: GameState = result.gameState || getDefaultState();
+      let newState = { ...state };
+      const tickCount = state.totalPlayTime + 1;
+
+      // 处理睡眠状态
+      if (state.isSleeping) {
+        // 睡眠时疲惫值持续减少
+        newState.tiredness = Math.max(0, state.tiredness - GAME_CONFIG.SLEEP_TIREDNESS_DECREASE);
+        
+        // 疲惫值为0时，猫咪醒来
+        if (newState.tiredness <= 0) {
+          newState.isSleeping = false;
+          newState.sleepStartTime = null;
+          newState.tiredness = 0;
+        }
+      } else {
+        // 非睡眠状态下的逻辑
+        if (tickCount % GAME_CONFIG.FOOD_CONSUME_INTERVAL === 0) {
+          if (state.catFood > 0) {
+            // 猫粮不为0时：消耗1猫粮，同时饥饿值减少1（直到饥饿值为0）
+            newState.catFood = Math.max(0, state.catFood - 1);
+            newState.hunger = Math.max(0, state.hunger - 1);
+          } else {
+            // 猫粮为0时：饥饿值增加1
+            newState.hunger = Math.min(100, state.hunger + 1);
+          }
+        }
+      }
+
+      newState.totalPlayTime = tickCount;
+
+      // 保存状态
+      chrome.storage.local.set({ gameState: newState });
+    });
+  }, GAME_CONFIG.TICK_INTERVAL);
+}
 
 // 创建悬浮球
 function createFloatingBall() {
@@ -40,11 +106,13 @@ function createFloatingBall() {
 
   // 拖动功能
   let isDragging = false;
+  let hasMoved = false;
   let startX: number, startY: number;
   let startRight: number, startBottom: number;
 
   ball.addEventListener('mousedown', (e: MouseEvent) => {
     isDragging = true;
+    hasMoved = false;
     startX = e.clientX;
     startY = e.clientY;
     const rect = ball.getBoundingClientRect();
@@ -59,6 +127,10 @@ function createFloatingBall() {
     
     const deltaX = startX - e.clientX;
     const deltaY = startY - e.clientY;
+    
+    if (Math.abs(deltaX) > 5 || Math.abs(deltaY) > 5) {
+      hasMoved = true;
+    }
     
     let newRight = startRight + deltaX;
     let newBottom = startBottom + deltaY;
@@ -87,9 +159,9 @@ function createFloatingBall() {
     }
   });
 
-  // 点击打开面板
-  ball.addEventListener('click', (e: MouseEvent) => {
-    if (Math.abs(e.clientX - startX) < 5 && Math.abs(e.clientY - startY) < 5) {
+  // 点击打开面板（只有没有拖动时才触发）
+  ball.addEventListener('click', () => {
+    if (!hasMoved) {
       togglePanel();
     }
   });
@@ -342,20 +414,6 @@ function showToast(message: string) {
   }
 }
 
-// 获取默认状态
-function getDefaultState(): GameState {
-  return {
-    hunger: 0,
-    tiredness: 0,
-    cleanliness: 100,
-    catFood: 0,
-    isSleeping: false,
-    catImageUrl: null,
-    catName: '你的猫咪',
-    lastBathTime: Date.now(),
-  };
-}
-
 // 更新面板UI
 function updatePanelUI(state: GameState) {
   // 更新数值
@@ -459,6 +517,7 @@ function togglePanel() {
 // 初始化
 function init() {
   createFloatingBall();
+  startGameLoop(); // 启动游戏逻辑定时器
   
   // 监听存储变化，更新UI
   chrome.storage.onChanged.addListener((changes: any) => {

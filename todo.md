@@ -80,4 +80,10 @@
 
 - [ ] 修复：悬浮球不显示问题
 
-- [ ] 推送代码到 GitHub 仓库
+- [x] 推送代码到 GitHub 仓库
+
+- [x] 创建 GitHub Release
+- [x] 添加开源许可证（MIT）
+
+- [x] 修复：弹窗 ERR_FILE_NOT_FOUND 错误
+- [x] 修复：悬浮球中饥饿值不变化
