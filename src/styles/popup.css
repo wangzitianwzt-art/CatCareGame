@@ -1,0 +1,154 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  width: 320px;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
+    Ubuntu, Cantarell, sans-serif;
+  background: #ffffff;
+  color: #11181c;
+}
+
+.popup-container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  padding: 12px;
+  gap: 12px;
+  position: relative;
+}
+
+/* Toast 提示样式 */
+.toast-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  display: flex;
+  justify-content: center;
+  padding: 8px 12px;
+  animation: toast-fade-in 0.3s ease;
+}
+
+.toast {
+  background: rgba(0, 0, 0, 0.85);
+  color: white;
+  padding: 10px 16px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 500;
+  text-align: center;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  animation: toast-slide-down 0.3s ease, toast-fade-out 0.5s ease 2.5s forwards;
+}
+
+@keyframes toast-slide-down {
+  from {
+    transform: translateY(-20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes toast-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes toast-fade-out {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+.header {
+  text-align: center;
+  padding: 8px 0;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.header h1 {
+  font-size: 16px;
+  font-weight: 600;
+  color: #11181c;
+}
+
+.actions {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.action-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  aspect-ratio: 1;
+  border: none;
+  border-radius: 8px;
+  background: #f5f5f5;
+  cursor: pointer;
+  font-size: 24px;
+  transition: all 0.2s ease;
+  border: 1px solid #e5e7eb;
+}
+
+.action-btn:hover:not(:disabled) {
+  background: #e5e7eb;
+  transform: scale(0.95);
+}
+
+.action-btn:active:not(:disabled) {
+  transform: scale(0.9);
+}
+
+.action-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* 深色模式支持 */
+@media (prefers-color-scheme: dark) {
+  body {
+    background: #151718;
+    color: #ecedee;
+  }
+
+  .header {
+    border-bottom-color: #334155;
+  }
+
+  .header h1 {
+    color: #ecedee;
+  }
+
+  .action-btn {
+    background: #1e2022;
+    border-color: #334155;
+  }
+
+  .action-btn:hover:not(:disabled) {
+    background: #334155;
+  }
+
+  .toast {
+    background: rgba(255, 255, 255, 0.9);
+    color: #11181c;
+  }
+}

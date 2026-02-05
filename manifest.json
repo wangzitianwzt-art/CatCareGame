@@ -1,0 +1,38 @@
+{
+  "manifest_version": 3,
+  "name": "猫咪养成",
+  "version": "1.0.0",
+  "description": "一个轻量化的养猫游戏浏览器插件",
+  "permissions": ["storage"],
+  "action": {
+    "default_popup": "src/popup.html",
+    "default_title": "猫咪养成",
+    "default_icon": {
+      "16": "assets/icon-16.png",
+      "48": "assets/icon-48.png",
+      "128": "assets/icon-128.png"
+    }
+  },
+  "background": {
+    "service_worker": "background.js"
+  },
+  "icons": {
+    "16": "assets/icon-16.png",
+    "48": "assets/icon-48.png",
+    "128": "assets/icon-128.png"
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["content.js"],
+      "css": ["content.css"],
+      "run_at": "document_end"
+    }
+  ],
+  "web_accessible_resources": [
+    {
+      "resources": ["assets/*"],
+      "matches": ["<all_urls>"]
+    }
+  ]
+}

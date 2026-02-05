@@ -1,0 +1,364 @@
+/* 悬浮球样式 */
+#cat-care-floating-ball {
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+  width: 50px;
+  height: 50px;
+  background: linear-gradient(135deg, #ff9a56 0%, #ff6b6b 100%);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  cursor: grab;
+  box-shadow: 0 4px 15px rgba(255, 107, 107, 0.4);
+  z-index: 2147483647;
+  user-select: none;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+#cat-care-floating-ball:hover {
+  transform: scale(1.1);
+  box-shadow: 0 6px 20px rgba(255, 107, 107, 0.5);
+}
+
+#cat-care-floating-ball:active {
+  cursor: grabbing;
+}
+
+/* 游戏面板样式 */
+#cat-care-panel {
+  position: fixed;
+  right: 80px;
+  bottom: 20px;
+  width: 320px;
+  background: #ffffff;
+  border-radius: 16px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+  z-index: 2147483646;
+  display: none;
+  overflow: hidden;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+.cat-care-panel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 16px;
+  background: linear-gradient(135deg, #ff9a56 0%, #ff6b6b 100%);
+  color: white;
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.cat-care-close-btn {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 4px;
+  transition: background 0.2s;
+}
+
+.cat-care-close-btn:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.cat-care-panel-content {
+  padding: 16px;
+  position: relative;
+}
+
+/* Toast 提示 */
+.cat-care-toast {
+  position: absolute;
+  top: 8px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(0, 0, 0, 0.85);
+  color: white;
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-size: 12px;
+  white-space: nowrap;
+  display: none;
+  z-index: 10;
+}
+
+@keyframes cat-care-toast-fade {
+  0% { opacity: 1; }
+  70% { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+/* 猫咪展示区 */
+.cat-care-cat-display {
+  margin-bottom: 12px;
+}
+
+.cat-care-image-container {
+  position: relative;
+  width: 100%;
+  min-height: 120px;
+  max-height: 200px;
+  background: #f5f5f5;
+  border-radius: 12px;
+  border: 2px solid #e5e7eb;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cat-care-cat-image {
+  max-width: 100%;
+  max-height: 200px;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+}
+
+.cat-care-placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  width: 100%;
+  height: 120px;
+  background: linear-gradient(135deg, #f5f7fa 0%, #e4e8ec 100%);
+}
+
+.cat-care-emoji {
+  font-size: 48px;
+  line-height: 1;
+}
+
+.cat-care-upload-btn {
+  padding: 8px 16px;
+  background: #ff6b6b;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 12px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.cat-care-upload-btn:hover {
+  background: #ff5252;
+  transform: scale(1.05);
+}
+
+.cat-care-upload-overlay {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 32px;
+  height: 32px;
+  background: rgba(0, 0, 0, 0.5);
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cat-care-upload-overlay:hover {
+  background: rgba(0, 0, 0, 0.7);
+}
+
+.cat-care-mood-badge {
+  position: absolute;
+  bottom: 8px;
+  right: 8px;
+  font-size: 24px;
+  background: rgba(255, 255, 255, 0.9);
+  padding: 4px 8px;
+  border-radius: 8px;
+}
+
+/* 状态显示 */
+.cat-care-stats {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.cat-care-stat-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.cat-care-stat-label {
+  font-size: 10px;
+  color: #687076;
+  font-weight: 500;
+}
+
+.cat-care-stat-bubble {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 6px 10px;
+  background: #f5f5f5;
+  border-radius: 20px;
+  border: 1px solid #e5e7eb;
+}
+
+.cat-care-stat-icon {
+  font-size: 14px;
+}
+
+.cat-care-stat-value {
+  font-size: 12px;
+  font-weight: 600;
+  color: #11181c;
+  min-width: 18px;
+  text-align: right;
+}
+
+/* 名字行 */
+.cat-care-name-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  margin-bottom: 12px;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 8px;
+  transition: background 0.2s;
+}
+
+.cat-care-name-row:hover {
+  background: rgba(255, 107, 107, 0.1);
+}
+
+.cat-care-cat-name {
+  font-size: 14px;
+  font-weight: 600;
+  color: #11181c;
+}
+
+.cat-care-edit-hint {
+  font-size: 12px;
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
+.cat-care-name-row:hover .cat-care-edit-hint {
+  opacity: 1;
+}
+
+.cat-care-status {
+  font-size: 12px;
+  color: #687076;
+}
+
+.cat-care-name-input {
+  border: 1px solid #ff6b6b;
+  border-radius: 8px;
+  padding: 6px 12px;
+  font-size: 14px;
+  font-weight: 600;
+  text-align: center;
+  width: 150px;
+  outline: none;
+  margin: 0 auto 12px;
+  display: block;
+}
+
+/* 操作按钮 */
+.cat-care-actions {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+}
+
+.cat-care-action-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  aspect-ratio: 1;
+  border: none;
+  border-radius: 12px;
+  background: #f5f5f5;
+  cursor: pointer;
+  font-size: 24px;
+  transition: all 0.2s;
+  border: 1px solid #e5e7eb;
+}
+
+.cat-care-action-btn:hover:not(:disabled) {
+  background: #e5e7eb;
+  transform: scale(0.95);
+}
+
+.cat-care-action-btn:active:not(:disabled) {
+  transform: scale(0.9);
+}
+
+.cat-care-action-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* 深色模式 */
+@media (prefers-color-scheme: dark) {
+  #cat-care-panel {
+    background: #1e2022;
+  }
+
+  .cat-care-image-container {
+    background: #151718;
+    border-color: #334155;
+  }
+
+  .cat-care-placeholder {
+    background: linear-gradient(135deg, #1e2022 0%, #334155 100%);
+  }
+
+  .cat-care-stat-bubble {
+    background: #151718;
+    border-color: #334155;
+  }
+
+  .cat-care-stat-value,
+  .cat-care-cat-name {
+    color: #ecedee;
+  }
+
+  .cat-care-stat-label,
+  .cat-care-status {
+    color: #9ba1a6;
+  }
+
+  .cat-care-action-btn {
+    background: #151718;
+    border-color: #334155;
+  }
+
+  .cat-care-action-btn:hover:not(:disabled) {
+    background: #334155;
+  }
+
+  .cat-care-name-input {
+    background: #151718;
+    color: #ecedee;
+  }
+
+  .cat-care-toast {
+    background: rgba(255, 255, 255, 0.9);
+    color: #11181c;
+  }
+}
